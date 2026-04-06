@@ -87,22 +87,20 @@
         <button class="submit">Submit</button>
       </section>
     </main>
-    <section class="submitted-state">
+
+    <section class="submitted-state" id="submittedState" hidden>
       <img
         src="./assets/images/illustration-thank-you.svg"
         alt="image of portable music ipod"
       />
-      <!-- Thank you state start -->
       <div class="rating-given"></div>
       <div class="message">
-        <h1>Thank you!</h1>
-        <p>
-          We appreciate you taking the time to give a rating. If you ever need
-          more support, don’t hesitate to get in touch!
-        </p>
+        <!-- Make the heading programmatically focusable -->
+        <h1 id="thankYouHeading" tabindex="-1">Thank you!</h1>
+        <p>We appreciate your feedback.</p>
       </div>
-
-      <!-- Thank you state end -->
+      <!-- Optional live region for polite announcements -->
+      <div aria-live="polite" class="sr-only">Submission received.</div>
     </section>
   </body>
 </html>
