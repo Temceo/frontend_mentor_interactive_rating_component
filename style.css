@@ -186,4 +186,9 @@ h1 {
 
 .message p {
   color: #969fad;
+  line-height: 1.5;
+}
+
+.sr-only {
+  display: none;
 }

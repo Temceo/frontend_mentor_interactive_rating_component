@@ -79,3 +79,18 @@ submitBtn.addEventListener("click", () => {
   p.textContent = `You selected ${currentRating} out of 5. Thank you!`;
   ratingGiven.appendChild(p);
 });
+
+function showSubmittedState() {
+  const submitted = document.getElementById("submittedState");
+  const heading = document.getElementById("thankYouHeading");
+
+  // reveal the submitted state (your implementation may vary)
+  submitted.hidden = false;
+
+  // Move keyboard & screen reader focus to the heading so users know the view changed
+  heading.focus(); // tabindex="-1" allows programmatic focus
+
+  // Optionally, update application state or hide previous form
+  const form = document.querySelector("form");
+  if (form) form.hidden = true;
+}
