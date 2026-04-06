@@ -92,12 +92,37 @@ h1 {
 }
 
 .ratings .rating {
+  display: flex;
+  place-items: center;
   padding: 1rem;
   background: #262e38;
-  height: 50px;
-  width: 50px;
+  height: 45px;
+  width: 45px;
+  border: none;
   border-radius: 100%;
-  text-align: center;
+  user-select: none;
+}
+
+/* Hide the radio input */
+.ratings input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  border: none;
+}
+
+/* Hide the legend visually but keep it accessible for screen readers */
+.ratings legend {
+  position: absolute; /* take it out of flow */
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0); /* old IE fallback */
+  clip-path: inset(50%);
+  border: 0;
 }
 
 .rating:hover {
@@ -113,6 +138,10 @@ h1 {
   background: #fff;
 }
 
+.selected {
+  background: red;
+}
+
 .cta .submit {
   width: 100%;
   padding: 0.5rem;
@@ -124,7 +153,8 @@ h1 {
   color: #000;
 }
 
-.submit:hover {
+.submit:hover,
+.submit:focus {
   cursor: pointer;
   background: #fff;
 }

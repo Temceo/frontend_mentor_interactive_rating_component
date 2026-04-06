@@ -1,63 +1,74 @@
-// const ratings = document.querySelectorAll(".rating");
-// const submitBtn = document.querySelector(".submit");
-// let currentRating;
-
-// ratings.forEach((rating) => {
-//   rating.addEventListener("click", () => {
-//     const id = rating.dataset.id - 1; // get data-id
-//     currentRating = rating.dataset.id;
-//     ratings.forEach((r) => r.classList.remove("active-btn"));
-//     rating.classList.add("active-btn");
-//   });
-// });
-
-// submitBtn.addEventListener("click", () => {
-//   if (currentRating == undefined) {
-//     const errorMessage = document.querySelector(".error-message");
-//     errorMessage.style.display = "block";
-//     // Hide it after 3 seconds
-//     setTimeout(() => {
-//       errorMessage.style.display = "none";
-//     }, 3000);
-//     return; // Stop the function execution
-//   } else {
-//     document.querySelector(".active-state").style.display = "none";
-//     document.querySelector(".submitted-state").style.display = "flex";
-//     const p = document.createElement("p");
-//     p.textContent = `You selected ${currentRating} out of 5`;
-//     document.querySelector(".rating-given").appendChild(p);
-//   }
-// });
-
 const ratings = document.querySelectorAll(".rating");
 const submitBtn = document.querySelector(".submit");
-const errorMessage = document.querySelector(".error-message");
 const activeState = document.querySelector(".active-state");
 const submittedState = document.querySelector(".submitted-state");
 const ratingGiven = document.querySelector(".rating-given");
 
 let currentRating = null;
 
-// Handle rating click
-ratings.forEach((rating) => {
-  rating.addEventListener("click", () => {
-    currentRating = rating.dataset.id;
+document.addEventListener("DOMContentLoaded", () => {
+  let selectedIndex = 0;
 
-    // Remove active class from all ratings
-    ratings.forEach((r) => r.classList.remove("active-btn"));
+  // Initialize first rating selected
+  function initialize() {
+    ratings.forEach((rating, i) => {
+      rating.classList.toggle("active-btn", i === 0);
+      rating.setAttribute("aria-checked", i === 0 ? "true" : "false");
+      rating.setAttribute("tabindex", i === 0 ? "0" : "-1");
+      currentRating = ratings[i].dataset.id;
+    });
+    ratings[selectedIndex].focus();
+  }
 
-    // Add active class to clicked rating
-    rating.classList.add("active-btn");
+  initialize();
+
+  function selectRating(index) {
+    ratings.forEach((rating, i) => {
+      rating.classList.toggle("active-btn", i === index);
+      rating.setAttribute("aria-checked", i === index ? "true" : "false");
+      rating.setAttribute("tabindex", i === index ? "0" : "-1");
+    });
+    ratings[index].focus();
+    currentRating = ratings[index].dataset.id;
+    selectedIndex = index;
+  }
+
+  ratings.forEach((rating, index) => {
+    // Click selects rating
+    rating.addEventListener("click", () => selectRating(index));
+
+    // Keyboard navigation (arrows only!)
+    rating.addEventListener("keydown", (e) => {
+      switch (e.key) {
+        case "ArrowRight":
+          selectRating((selectedIndex + 1) % ratings.length);
+          e.preventDefault();
+          break;
+        case "ArrowLeft":
+          selectRating((selectedIndex - 1 + ratings.length) % ratings.length);
+          e.preventDefault();
+          break;
+        case "ArrowDown":
+          // Move focus to Submit button
+          submitBtn.focus();
+          e.preventDefault();
+          break;
+      }
+    });
+
+    // Handle Submit button keyboard
+    submitBtn.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowUp") {
+        // Move focus back to currently selected rating
+        ratings[selectedIndex].focus();
+        e.preventDefault();
+      }
+    });
   });
 });
 
 // Handle submit click
 submitBtn.addEventListener("click", () => {
-  if (!currentRating) {
-    showError("Please select a rating before submitting!");
-    return;
-  }
-
   // Hide active state, show submitted state
   activeState.style.display = "none";
   submittedState.style.display = "flex";
@@ -68,13 +79,3 @@ submitBtn.addEventListener("click", () => {
   p.textContent = `You selected ${currentRating} out of 5. Thank you!`;
   ratingGiven.appendChild(p);
 });
-
-// Utility function to show error messages temporarily
-function showError(message) {
-  errorMessage.textContent = message;
-  errorMessage.style.display = "block";
-
-  setTimeout(() => {
-    errorMessage.style.display = "none";
-  }, 3000);
-}
